@@ -26,9 +26,16 @@
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run build"
   },
-  "keywords": ["convex", "sync", "check", "lint", "static-analysis"],
+  "keywords": [
+    "convex",
+    "sync",
+    "check",
+    "lint",
+    "static-analysis"
+  ],
   "license": "MIT",
   "devDependencies": {
+    "@types/node": "^25.3.2",
     "tsup": "^8.0.0",
     "typescript": "^5.4.0",
     "vitest": "^3.0.0"
