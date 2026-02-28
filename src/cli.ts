@@ -77,7 +77,12 @@ export async function main() {
   }
 
   if (args.version) {
-    console.log("0.1.0");
+    const { readFileSync } = await import("node:fs");
+    const { fileURLToPath } = await import("node:url");
+    const { join, dirname } = await import("node:path");
+    const pkgPath = join(dirname(fileURLToPath(import.meta.url)), "..", "package.json");
+    const pkg = JSON.parse(readFileSync(pkgPath, "utf-8"));
+    console.log(pkg.version);
     process.exit(0);
   }
 
