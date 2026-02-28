@@ -4,7 +4,7 @@
   "description": "Zero-config CLI to check Convex frontend/backend function sync",
   "type": "module",
   "bin": {
-    "convex-sync-check": "./bin/convex-sync-check.mjs"
+    "convex-sync-check": "bin/convex-sync-check.mjs"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
