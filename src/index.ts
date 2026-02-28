@@ -5,11 +5,30 @@ import type { CheckOptions, CheckResult } from "./types.js";
 
 export type { CheckOptions, CheckResult } from "./types.js";
 
+/**
+ * Convert a simple glob pattern (supports `*` as wildcard) to a RegExp.
+ * e.g. "support.tickets.*" matches "support.tickets.list", "support.tickets.get"
+ */
+function globToRegex(pattern: string): RegExp {
+  const escaped = pattern.replace(/[.+^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*");
+  return new RegExp(`^${escaped}$`);
+}
+
+function matchesAnyPattern(apiPath: string, patterns: string[]): boolean {
+  return patterns.some((p) => globToRegex(p).test(apiPath));
+}
+
 export function checkConvexSync(options: CheckOptions & { convexDir: string; frontendDirs: string[] }): CheckResult {
   const defs = scanBackend(options.convexDir, options.functionWrappers);
   const refs = scanFrontend(options.frontendDirs);
 
-  const { errors, warnings, passed } = analyze(defs, refs);
+  const { errors, warnings } = analyze(defs, refs);
+
+  // Filter errors/warnings by ignore patterns
+  const ignorePatterns = options.ignore ?? [];
+  const filteredErrors = ignorePatterns.length > 0
+    ? errors.filter((e) => !matchesAnyPattern(e.apiPath, ignorePatterns))
+    : errors;
 
   // Compute stats
   const publicFunctions = defs.filter((d) => !d.isInternal).length;
@@ -39,8 +58,8 @@ export function checkConvexSync(options: CheckOptions & { convexDir: string; fro
       frontendRefs: uniqueRefs.size,
       backendModules: uniqueModules.size,
     },
-    errors,
+    errors: filteredErrors,
     warnings: filteredWarnings,
-    passed,
+    passed: filteredErrors.length === 0,
   };
 }

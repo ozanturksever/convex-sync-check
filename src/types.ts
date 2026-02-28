@@ -54,10 +54,7 @@ export interface CheckOptions {
   convexDir?: string;
   frontendDirs?: string[];
   functionWrappers?: Record<string, "public" | "internal">;
-  ignore?: {
-    backend?: string[];
-    frontend?: string[];
-  };
+  ignore?: string[];
   suppressWarnings?: WarningType[];
   deployed?: boolean;
   verbose?: boolean;
@@ -67,9 +64,6 @@ export interface ConfigFile {
   convexDir?: string;
   frontendDirs?: string[];
   functionWrappers?: Record<string, "public" | "internal">;
-  ignore?: {
-    backend?: string[];
-    frontend?: string[];
-  };
+  ignore?: string[];
   suppressWarnings?: WarningType[];
 }

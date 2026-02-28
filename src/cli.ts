@@ -127,9 +127,17 @@ export async function main() {
     ? (["UNREFERENCED"] as const)
     : config.suppressWarnings;
 
+  // Merge ignore patterns from CLI and config
+  const cliIgnore = args.ignore ? args.ignore.split(",").map((s) => s.trim()) : [];
+  const configIgnore = config.ignore ?? [];
+  const ignore = [...cliIgnore, ...configIgnore];
+
   if (args.verbose) {
     console.log(`Scanning backend: ${convexDir}`);
     console.log(`Scanning frontend: ${frontendDirs.join(", ")}`);
+    if (ignore.length > 0) {
+      console.log(`Ignoring ${ignore.length} pattern(s)`);
+    }
   }
 
   const result = checkConvexSync({
@@ -138,6 +146,7 @@ export async function main() {
     functionWrappers:
       Object.keys(functionWrappers).length > 0 ? functionWrappers : undefined,
     suppressWarnings: suppressWarnings as any,
+    ignore: ignore.length > 0 ? ignore : undefined,
     verbose: args.verbose,
   });
 
