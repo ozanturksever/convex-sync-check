@@ -1,6 +1,6 @@
 {
   "name": "@fatagnus/convex-sync-check",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Zero-config CLI to check Convex frontend/backend function sync",
   "type": "module",
   "bin": {
